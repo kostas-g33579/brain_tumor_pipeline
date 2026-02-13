@@ -16,13 +16,13 @@
 *.mhd
 
 # Large feature CSVs (but keep small example/test files)
-**/features/**/*.csv
-!**/features/**/example_*.csv
-!**/features/**/test_*.csv
+thesis_outputs/features/**/*.csv
+!thesis_outputs/features/**/example_*.csv
+!thesis_outputs/features/**/test_*.csv
 
-# Preprocessed images directory
-**/preprocessed/**/*.nii.gz
-**/preprocessed/**/
+# Preprocessed images directory (keep structure, exclude .nii.gz)
+thesis_outputs/preprocessed/**/*.nii.gz
+thesis_outputs/preprocessed/**/BraTS-*/
 
 # Model checkpoints and weights
 *.h5
@@ -49,24 +49,26 @@ thesis_data/**/*.csv
 !thesis_data/**/README.csv
 
 # ============================================================
-# OUTPUTS - NEVER COMMIT (except logs and reports)
+# OUTPUTS - EXCLUDE FILES BUT KEEP STRUCTURE
 # ============================================================
-
-# Keep directory structure with .gitkeep files
-thesis_outputs/features/
-thesis_outputs/preprocessed/
-thesis_outputs/models/
-thesis_outputs/results/
-thesis_outputs/plots/
-
-# But keep logs and small reports
-!thesis_outputs/logs/*.log
-!thesis_outputs/logs/*.txt
-!thesis_outputs/**/*_report.csv
-!thesis_outputs/**/*_summary.txt
 
 # Master index (can be large)
 thesis_outputs/master_index.csv
+
+# Logs - keep small ones
+thesis_outputs/logs/*.log
+
+# Models
+thesis_outputs/models/**/*.h5
+thesis_outputs/models/**/*.pt
+
+# Results
+thesis_outputs/results/**/*.csv
+!thesis_outputs/results/**/*_summary.csv
+
+# Plots
+thesis_outputs/plots/**/*.png
+thesis_outputs/plots/**/*.jpg
 
 # ============================================================
 # PYTHON
