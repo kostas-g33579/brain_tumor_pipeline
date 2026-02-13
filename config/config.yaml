@@ -1,0 +1,135 @@
+# ============================================================
+# Brain Tumor Classification Pipeline - Configuration
+# MSc Thesis - AUTH Biomedical Engineering
+# ============================================================
+
+# ------------------------------------------------------------
+# PATHS
+# Local PC:  C:/Users/kplom/Documents/
+# biowin:    update paths block at bottom of this file
+# ------------------------------------------------------------
+paths:
+  # GLI (Glioma) dataset
+  gli_training_dir:   "C:/Users/kplom/Documents/thesis/thesis_data/GLI/training"
+  gli_validation_dir: "C:/Users/kplom/Documents/thesis/thesis_data/GLI/validation"
+  gli_mapping_xlsx:   "C:/Users/kplom/Documents/thesis/thesis_data/GLI/BraTS2023_2017_GLI_Mapping.xlsx"
+
+  # MEN (Meningioma) dataset
+  men_training_dir:   "C:/Users/kplom/Documents/thesis/thesis_data/MEN/training"
+  men_validation_dir: "C:/Users/kplom/Documents/thesis/thesis_data/MEN/validation"
+  men_clinical_xlsx:  "C:/Users/kplom/Documents/thesis/thesis_data/MEN/Meningioma_supplementary_clinical_data_and_imaging_parameters_for_training_and_validation_sets.xlsx"
+
+  # Pipeline outputs (never committed to git)
+  output_root:  "C:/Users/kplom/Documents/thesis/thesis_outputs"
+  master_csv:   "C:/Users/kplom/Documents/thesis/thesis_outputs/master_index.csv"
+  logs_dir:     "C:/Users/kplom/Documents/thesis/thesis_outputs/logs"
+
+  # Feature extraction outputs
+  features_dir_pyradiomics: "C:/Users/kplom/Documents/thesis/thesis_outputs/features/pyradiomics"
+  features_dir_collage:     "C:/Users/kplom/Documents/thesis/thesis_outputs/features/collage"
+  features_dir_combined:    "C:/Users/kplom/Documents/thesis/thesis_outputs/features/combined_all"
+
+# ---- biowin paths (uncomment and use when running on lab PC) ----
+# paths:
+#   gli_training_dir:   "D:/thesis/thesis_data/GLI/training"
+#   gli_validation_dir: "D:/thesis/thesis_data/GLI/validation"
+#   gli_mapping_xlsx:   "D:/thesis/thesis_data/GLI/BraTS2023_2017_GLI_Mapping.xlsx"
+#   men_training_dir:   "D:/thesis/thesis_data/MEN/training"
+#   men_validation_dir: "D:/thesis/thesis_data/MEN/validation"
+#   men_clinical_xlsx:  "D:/thesis/thesis_data/MEN/Meningioma_supplementary_clinical_data_and_imaging_parameters_for_training_and_validation_sets.xlsx"
+#   output_root:  "D:/thesis/thesis_outputs"
+#   master_csv:   "D:/thesis/thesis_outputs/master_index.csv"
+#   features_dir: "D:/thesis/thesis_outputs/features"
+#   logs_dir:     "D:/thesis/thesis_outputs/logs"
+
+# ------------------------------------------------------------
+# MODALITIES
+# ------------------------------------------------------------
+modalities:
+  t1:    true   
+  t1c:   true   
+  t2:    true
+  flair: true
+
+# BraTS NIfTI filename suffixes
+modality_suffixes:
+  t1:    "-t1n.nii.gz"
+  t1c:   "-t1c.nii.gz"
+  t2:    "-t2w.nii.gz"
+  flair: "-t2f.nii.gz"
+  seg:   "-seg.nii.gz"
+
+# ------------------------------------------------------------
+# PREPROCESSING
+# ------------------------------------------------------------
+preprocessing:
+  skull_strip_gli: false   # BraTS GLI is already skull-stripped
+  skull_strip_men: true    # BraTS MEN is defaced but NOT skull-stripped
+  normalize: true          # Z-score normalization per modality per case
+  skip_missing: true       # Skip cases with missing files instead of crashing
+
+# ------------------------------------------------------------
+# SEGMENTATION / ROI
+# ------------------------------------------------------------
+segmentation:
+  # whole_tumor = combine all label values (1+2+3)
+  # This is the safest strategy for cross-dataset consistency
+  roi_strategy: "whole_tumor"
+  custom_labels: [1, 2, 3]
+  min_roi_voxels: 100      # Skip ROI if smaller than this (likely bad mask)
+
+# ------------------------------------------------------------
+# RADIOMICS (PyRadiomics)
+# ------------------------------------------------------------
+radiomics:
+  feature_classes:
+    - firstorder
+    - shape
+    - glcm
+    - glrlm
+    - glszm
+    - ngtdm
+  resample: false                      # BraTS is already 1mm³ isotropic
+  resample_pixel_spacing: [1.0, 1.0, 1.0]
+  bin_width: 25
+  verbose: false
+
+# ------------------------------------------------------------
+# COLLAGE 
+# ------------------------------------------------------------
+collage:
+  svd_radius: 5              # Radius for dominant angle calculation (default: 5)
+  num_unique_angles: 64      # Number of bins for angle discretization (default: 64)
+
+# ------------------------------------------------------------
+# DATASET LABELS
+# ------------------------------------------------------------
+labels:
+  glioma:     0
+  meningioma: 1
+
+include_validation_set: true   # Enable after training pipeline confirmed working
+
+# ------------------------------------------------------------
+# COMBAT HARMONIZATION (enable after feature extraction done)
+# ------------------------------------------------------------
+combat:
+  enabled: false
+  batch_variable: "site"
+  covariates: ["label"]
+
+# ------------------------------------------------------------
+# COMPUTE
+# ------------------------------------------------------------
+compute:
+  use_gpu: true
+  gpu_id: 0
+  n_jobs: 4    # Keep at 4 locally; set to 8 on biowin (3090 system)
+
+# ------------------------------------------------------------
+# LOGGING
+# ------------------------------------------------------------
+logging:
+  level: "INFO"
+  save_logs: true
+  log_per_case: false

@@ -1,0 +1,221 @@
+# ============================================================
+# Brain Tumor Classification Pipeline - .gitignore
+# ============================================================
+# Excludes large data files while preserving directory structure
+# and tracking all code, configs, and documentation
+
+# ============================================================
+# LARGE DATA FILES - NEVER COMMIT
+# ============================================================
+
+# NIfTI image files (raw and preprocessed)
+*.nii
+*.nii.gz
+*.nrrd
+*.mha
+*.mhd
+
+# Large feature CSVs (but keep small example/test files)
+**/features/**/*.csv
+!**/features/**/example_*.csv
+!**/features/**/test_*.csv
+
+# Preprocessed images directory
+**/preprocessed/**/*.nii.gz
+**/preprocessed/**/
+
+# Model checkpoints and weights
+*.h5
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.pkl
+*.joblib
+
+# ============================================================
+# DATASETS - NEVER COMMIT
+# ============================================================
+
+# BraTS dataset directories (will be copied via external drive)
+thesis_data/GLI/training/BraTS-GLI-*/
+thesis_data/GLI/validation/BraTS-GLI-*/
+thesis_data/MEN/training/BraTS-MEN-*/
+thesis_data/MEN/validation/BraTS-MEN-*/
+
+# Keep Excel metadata files but exclude large CSVs
+thesis_data/**/*.csv
+!thesis_data/**/metadata*.csv
+!thesis_data/**/README.csv
+
+# ============================================================
+# OUTPUTS - NEVER COMMIT (except logs and reports)
+# ============================================================
+
+# Keep directory structure with .gitkeep files
+thesis_outputs/features/
+thesis_outputs/preprocessed/
+thesis_outputs/models/
+thesis_outputs/results/
+thesis_outputs/plots/
+
+# But keep logs and small reports
+!thesis_outputs/logs/*.log
+!thesis_outputs/logs/*.txt
+!thesis_outputs/**/*_report.csv
+!thesis_outputs/**/*_summary.txt
+
+# Master index (can be large)
+thesis_outputs/master_index.csv
+
+# ============================================================
+# PYTHON
+# ============================================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+env/
+ENV/
+btc/
+.conda/
+*.egg-info/
+
+# Jupyter notebooks (checkpoints and outputs)
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+*.ipynb
+
+# Distribution / packaging
+build/
+dist/
+*.egg
+
+# ============================================================
+# R
+# ============================================================
+
+# R session data
+.Rdata
+.Rhistory
+.RData
+.Rproj.user
+
+# R output
+*.Rout
+*.pdf
+*.ps
+
+# ============================================================
+# DOCKER
+# ============================================================
+
+# Docker volumes and temp files
+.docker/
+*.tar
+C:/  # Weird Windows Docker mount artifact
+
+# ============================================================
+# IDE / EDITOR
+# ============================================================
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+
+# Spyder
+.spyderproject
+.spyproject
+
+# ============================================================
+# OS
+# ============================================================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+.directory
+
+# ============================================================
+# LOGS AND TEMP
+# ============================================================
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Large log files (keep small ones)
+*.log
+!thesis_outputs/logs/*.log
+
+# Temp directories
+tmp/
+temp/
+cache/
+
+# ============================================================
+# MISC
+# ============================================================
+
+# Compressed archives (but keep small config archives)
+*.zip
+*.tar.gz
+*.rar
+!config/*.zip
+
+# Credentials and secrets
+*.key
+*.pem
+*.env
+.env
+secrets.yaml
+
+# Large binary files
+*.bin
+*.dat
+*.hdf5
+
+# ============================================================
+# PRESERVE STRUCTURE - KEEP THESE
+# ============================================================
+# Add .gitkeep files to empty directories you want tracked
+
+!scripts/.gitkeep
+!config/.gitkeep
+!thesis_outputs/.gitkeep
+!thesis_outputs/logs/.gitkeep
+!thesis_outputs/features/.gitkeep
+!thesis_outputs/features/pyradiomics/.gitkeep
+!thesis_outputs/features/collage/.gitkeep
+!thesis_outputs/features/combined_all/.gitkeep
+
+# Keep all documentation
+!README.md
+!CHANGELOG.md
+!LICENSE
+!requirements.txt
+!Dockerfile
+!*.md
