@@ -38,16 +38,17 @@ library(dplyr)    # Data manipulation
 # Parse command line arguments
 args <- commandArgs(trailingOnly = TRUE)
 
-if (length(args) < 4) {
-  cat("Usage: Rscript 05_combat_harmonization.R <input_csv> <output_csv> <batch_col> <bio_covariates>\n")
+if (length(args) < 3) {
+  cat("Usage: Rscript 05_combat_harmonization.R <input_csv> <output_csv> <batch_col> [bio_covariates]\n")
   cat("Example: Rscript 05_combat_harmonization.R features_clean.csv features_harmonized.csv site label\n")
+  cat("Example (no covariates): Rscript 05_combat_harmonization.R features_clean.csv features_harmonized.csv site\n")
   quit(status = 1)
 }
 
 input_csv <- args[1]
 output_csv <- args[2]
 batch_col <- args[3]
-bio_covariates <- strsplit(args[4], ",")[[1]]  # Can be comma-separated list
+bio_covariates <- if (length(args) >= 4 && args[4] != "") strsplit(args[4], ",")[[1]] else c()  # Empty if not provided or empty string
 
 cat("================================================================\n")
 cat("ComBat Harmonization - Brain Tumor Classification\n")
